@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 function Register() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false)
   const [cookies, setCookies] = useCookies(["token", "email"]);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ function Register() {
   }, []);
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true)
     const response = await axios.post(
       "http://localhost:8080/api/user/register",
       {
@@ -27,12 +29,13 @@ function Register() {
     );
 
     if (response.data.success) {
-        toast.success(response.data.message)
+        // toast.success(response.data.message)
         setCookies("email", email)
       navigate("/verify");
     }else{
         toast.error(response.data.message)
     }
+    setLoading(false)
   };
   return (
     <>
@@ -56,7 +59,7 @@ function Register() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Register</button>
+        <button type="submit" className={`${loading} ? loading: null`}>Register</button>
       </form>
       <p>
         Already have an account?{" "}
