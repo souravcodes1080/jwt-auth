@@ -33,11 +33,22 @@ function Verify() {
       toast.error(response.data.message);
     }
   };
+  const resendOtp = async () =>{
+    const response = await axios.post("http://localhost:8080/api/user/resend", {
+      email: cookies.email
+    });
+    if (response.data.success) {
+      toast.success(response.data.message);
+  } else {
+    toast.error(response.data.message);
+  }
+  }
 
   return (
     <>
       <h1>Verify</h1>
       <p>An otp has been sent to your email address. {cookies.email}</p>
+      <p className="resend" onClick={resendOtp}>Resend otp?</p>
       <form onSubmit={onSubmitHandler}>
         <OtpInput
           value={otp}
