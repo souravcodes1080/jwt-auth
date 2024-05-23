@@ -1,6 +1,6 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcrypt";
-import nodemailer from "nodemailer";
+import sendMail from "../utils/nodemailerConfig.js";
 import { genToken, verifyToken } from "../utils/jwtConfig.js";
 const register = async (req, res) => {
   try {
@@ -23,24 +23,9 @@ const register = async (req, res) => {
       password: hashedPassword,
     });
     if (newUser) {
-    
-      const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
-        secure: false,
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASSWORD,
-        },
-      });
-    await transporter.sendMail({
-        from: process.env.SMTP_USER,
-        to: email, 
-        subject: "Email verification.", 
-        text: `Your OTP for email verification is: ${newUser.otp}. The otp is valid for 10 min. Do not share otp with anyone else.`, 
-        html: `Your OTP for email verification is: ${newUser.otp}.<br>The otp is valid for 10 min.<br>Do not share otp with anyone else.`, 
-      });
-      
+      const otp = await newUser.otp;
+      await sendMail(email, otp);
+
       return res.json({
         success: true,
         message: "User registered successfully.",
@@ -54,21 +39,21 @@ const register = async (req, res) => {
     });
   }
 };
-const verifyEmail = async (req, res) =>{
+const verifyEmail = async (req, res) => {
   try {
     //TODO: we can take email from header instead of body!
-    const {email, otp} = req.body;
+    const { email, otp } = req.body;
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
       return res.json({ success: false, message: "No user found." });
     }
-    if(otp === existingUser.otp){
-      await User.findOneAndUpdate({email},{isVerified : true})
+    if (otp === existingUser.otp) {
+      await User.findOneAndUpdate({ email }, { isVerified: true });
       return res.json({
         success: true,
         message: "User verified.",
       });
-  }
+    }
   } catch (error) {
     console.log(err);
     return res.json({
@@ -76,7 +61,7 @@ const verifyEmail = async (req, res) =>{
       message: "Error while veryfying email.",
     });
   }
-}
+};
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
