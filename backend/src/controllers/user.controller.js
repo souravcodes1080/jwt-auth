@@ -1,6 +1,7 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import sendMail from "../utils/nodemailerConfig.js";
+import otpGenerator from 'otp-generator'
 import { genToken, verifyToken } from "../utils/jwtConfig.js";
 const register = async (req, res) => {
   try {
@@ -17,15 +18,21 @@ const register = async (req, res) => {
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    const otp = otpGenerator.generate(5, {
+      lowerCaseAlphabets: false,
+      upperCaseAlphabets: false,
+      specialChars: false,
+    })
+    console.log(otp)
     const newUser = await User.create({
       username: username,
       email: email,
       password: hashedPassword,
+      otp: otp
     });
     if (newUser) {
-      const otp = await newUser.otp;
       await sendMail(email, otp);
-
+      console.log(otp)
       return res.json({
         success: true,
         message: "User registered successfully.",
