@@ -54,6 +54,29 @@ const register = async (req, res) => {
     });
   }
 };
+const verifyEmail = async (req, res) =>{
+  try {
+    //TODO: we can take email from header instead of body!
+    const {email, otp} = req.body;
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+      return res.json({ success: false, message: "No user found." });
+    }
+    if(otp === existingUser.otp){
+      await User.findOneAndUpdate({email},{isVerified : true})
+      return res.json({
+        success: true,
+        message: "User verified.",
+      });
+  }
+  } catch (error) {
+    console.log(err);
+    return res.json({
+      success: false,
+      message: "Error while veryfying email.",
+    });
+  }
+}
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -106,4 +129,4 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-export { register, login, getAllUsers };
+export { register, verifyEmail, login, getAllUsers };
