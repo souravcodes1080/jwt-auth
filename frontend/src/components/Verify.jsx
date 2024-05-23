@@ -8,9 +8,10 @@ import { toast } from "react-toastify";
 function Verify() {
   const navigate = useNavigate();
   const [otp, setOtp] = useState("");
-  const [cookies] = useCookies(["token", "email"]);
+  const [cookies, removeCookie] = useCookies(["token", "email"]);
   useEffect(() => {
     if (cookies["token"]) {
+        
       navigate("/dashboard");
     } else if (!cookies["email"]) {
       navigate("/register");
@@ -18,13 +19,14 @@ function Verify() {
   }, []);
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    
+
     const response = await axios.post("http://localhost:8080/api/user/verify", {
       otp: Number(otp),
       email: cookies.email,
     });
     if (response.data.success) {
-      toast.success(response.data.message);
+        toast.success(response.data.message);
+        removeCookie("email")
 
       navigate("/login");
     } else {
@@ -41,6 +43,9 @@ function Verify() {
           value={otp}
           onChange={setOtp}
           numInputs={5}
+          shouldAutoFocus={true}
+          containerStyle={true}
+          inputStyle={true}
           renderSeparator={<span>&nbsp;&nbsp;</span>}
           renderInput={(props) => <input {...props} />}
         />
