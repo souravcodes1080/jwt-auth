@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Cookies, useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import OtpInput from "react-otp-input";
 import { toast } from "react-toastify";
 
 function Verify() {
@@ -17,8 +18,7 @@ function Verify() {
   }, []);
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-
-    console.log(typeof otp + " " + cookies.email);
+    
     const response = await axios.post("http://localhost:8080/api/user/verify", {
       otp: Number(otp),
       email: cookies.email,
@@ -35,13 +35,14 @@ function Verify() {
   return (
     <>
       <h1>Verify</h1>
-      <p>An otp has been sent to your email address.</p>
+      <p>An otp has been sent to your email address. {cookies.email}</p>
       <form onSubmit={onSubmitHandler}>
-        <input
-          type="number"
-          placeholder="Enter yor otp"
-          onChange={(e) => setOtp(e.target.value)}
+        <OtpInput
           value={otp}
+          onChange={setOtp}
+          numInputs={5}
+          renderSeparator={<span>&nbsp;&nbsp;</span>}
+          renderInput={(props) => <input {...props} />}
         />
         <button type="submit">Verify</button>
       </form>
