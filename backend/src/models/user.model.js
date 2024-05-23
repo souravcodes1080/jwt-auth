@@ -15,6 +15,14 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    isVerify: {
+      type: Boolean,
+      default: false,
+    },
+    otp:{
+      type: Number,
+      default: Math.floor(Math.random() * 10000)
+    }
   },
   { timeStamp: true }
 );
