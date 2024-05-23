@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 function Register() {
   const navigate = useNavigate();
-  const [cookies] = useCookies(["token"]);
+  const [cookies, setCookies] = useCookies(["token", "email"]);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +28,8 @@ function Register() {
 
     if (response.data.success) {
         toast.success(response.data.message)
-      navigate("/login");
+        setCookies("email", email)
+      navigate("/verify");
     }else{
         toast.error(response.data.message)
     }

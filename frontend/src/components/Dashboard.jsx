@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["token", "email"]);
 
   const [data, setData] = useState([]);
 
@@ -21,10 +21,11 @@ function Dashboard() {
     }
   };
 
-  const handleLogout = ()=>{
-    removeCookie(['token'])
-    navigate("/")
-  }
+  const handleLogout = () => {
+    removeCookie(["token"]);
+    removeCookie(["email"]);
+    navigate("/");
+  };
 
   useEffect(() => {
     if (!cookies["token"]) {
@@ -38,7 +39,9 @@ function Dashboard() {
       {data.map((user, index) => (
         <div key={index}>{user.username}</div>
       ))}
-      <button className="logout-btn" onClick={handleLogout}>Logout</button>
+      <button className="logout-btn" onClick={handleLogout}>
+        Logout
+      </button>
     </>
   );
 }

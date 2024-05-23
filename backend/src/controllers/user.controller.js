@@ -53,6 +53,11 @@ const verifyEmail = async (req, res) => {
         success: true,
         message: "User verified.",
       });
+    }else{
+      return res.json({
+        success: false,
+        message: "Incorrect Otp.",
+      });
     }
   } catch (error) {
     console.log(err);
