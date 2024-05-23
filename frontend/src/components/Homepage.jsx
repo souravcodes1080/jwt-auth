@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import "./components.css";
+import "./css/register.css";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import hero from "../assets/hero.png";
 import logo from "../assets/logo.png";
 import google from "../assets/google.png";
 import github from "../assets/github.png";
+import eyeOpen from "../assets/eyeOpen.jpg";
+import eyeClose from "../assets/eyeClose.jpg";
 import axios from "axios";
 import { toast } from "react-toastify";
 function Homepage() {
@@ -14,6 +16,8 @@ function Homepage() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [hide, setHide] = useState(true);
+
 
   useEffect(() => {
     if (cookies["token"]) {
@@ -73,23 +77,36 @@ function Homepage() {
                 <div className="input-wrapper">
                   <label>Password*</label>
                   <input
+                  className="password"
                     required
-                    type="password"
+                    type={hide ? "password" : "text"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Create strong password"
                   />
+                  <div onClick={()=>setHide(!hide)}>
+                    {
+                    hide? <img className="hide" src={eyeClose} alt="" width={"20px"} />:<img className="hide" src={eyeOpen} alt="" width={"20px"} />
+                  }
+                  </div>
+                  
+                    
+                  
                 </div>
-                <div className="input-wrapper terms">
+                {/* <div className="input-wrapper terms">
+                  <div>
+
                   <input
                     required
                     type="checkbox"
                     placeholder="Create strong password"
                   />
                   <label>agree to terms and condition</label>
-                </div>
+                  </div>
+                </div> */}
 
                 <button type="submit">Register</button>
+                <p>Already have an account? <span onClick={()=>navigate("/login")}>Log In</span></p>
               </form>
               <div className="or">
                 <div></div>
