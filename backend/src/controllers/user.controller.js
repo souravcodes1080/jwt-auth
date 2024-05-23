@@ -1,6 +1,6 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcrypt";
-import sendMail from "../utils/nodemailerConfig.js";
+import sendMail, {sendWelcomeMail} from "../utils/nodemailerConfig.js";
 import otpGenerator from "otp-generator";
 import { genToken, verifyToken } from "../utils/jwtConfig.js";
 const register = async (req, res) => {
@@ -56,6 +56,7 @@ const verifyEmail = async (req, res) => {
     }
     if (otp === existingUser.otp) {
       await User.findOneAndUpdate({ email }, { isVerified: true });
+      sendWelcomeMail(email, existingUser.username)
       return res.json({
         success: true,
         message: "User verified.",
@@ -71,6 +72,31 @@ const verifyEmail = async (req, res) => {
     return res.json({
       success: false,
       message: "Error while veryfying email.",
+    });
+  }
+};
+const resendOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const otp = otpGenerator.generate(5, {
+      lowerCaseAlphabets: false,
+      upperCaseAlphabets: false,
+      specialChars: false,
+    });
+    const user = await User.findOneAndUpdate({ email }, { otp: otp });
+    await sendMail(email, otp);
+
+    if(user){
+      return res.json({
+        success: true,
+        message: "Otp sent.",
+      });
+    }
+  } catch (error) {
+    console.log(err);
+    return res.json({
+      success: false,
+      message: "Error resending otp.",
     });
   }
 };
@@ -126,4 +152,4 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-export { register, verifyEmail, login, getAllUsers };
+export { register, verifyEmail, resendOtp, login, getAllUsers };
