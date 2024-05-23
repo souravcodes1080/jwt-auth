@@ -137,6 +137,18 @@
     margin-bottom: 10px;
     cursor: not-allowed;
 }
+.otp-input{
+    display: flex;
+    justify-content: center;
+    font-size: 26px ;
+    outline: none;
+}
+.resend {
+    color: rgb(78, 78, 255) !important;
+    cursor: pointer;
+    text-decoration: underline;
+    text-align: right;
+}
 
 @media (max-width:1400px) {
     .register-page{
