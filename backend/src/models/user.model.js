@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import otpGenerator from "otp-generator";
 const userSchema = mongoose.Schema(
   {
     username: {
@@ -19,10 +19,14 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    otp:{
+    otp: {
       type: Number,
-      default: Math.floor(Math.random() * 10000)
-    }
+      default: otpGenerator.generate(5, {
+        lowerCaseAlphabets: false,
+        upperCaseAlphabets: false,
+        specialChars: false,
+      }),
+    },
   },
   { timeStamp: true }
 );
