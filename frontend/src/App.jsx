@@ -12,7 +12,6 @@ function App() {
       <Routes>
         <Route path="/" exact element={<Homepage />} />
         <Route path="/login" exact element={<Login />} />
-        
         <Route path="/dashboard" exact element={<Dashboard />} />
       </Routes>
       <ToastContainer

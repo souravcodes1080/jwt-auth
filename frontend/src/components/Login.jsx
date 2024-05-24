@@ -1,26 +1,28 @@
-import axios from "axios";
-import "./css/register.css";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+
+import "./css/register.css";
 import hero from "../assets/hero.png";
 import logo from "../assets/logo.png";
 import google from "../assets/google.png";
 import github from "../assets/github.png";
 import eyeOpen from "../assets/eyeOpen.jpg";
 import eyeClose from "../assets/eyeClose.jpg";
-
 import loader from "../assets/loader.png";
-import { AuthContext } from "../context/AuthContext";
+
 function Login() {
-  const {loading, setLoading} = useContext(AuthContext)
+  const { loading, setLoading } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [cookies, setCookie] = useCookies(["token"]);
-  // const [loading, setLoading] = useState(false);
+  const [cookies, setCookie] = useCookies(["token", "username", "email"]);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [hide, setHide] = useState(true);
+
   useEffect(() => {
     if (cookies["token"]) {
       navigate("/dashboard");
@@ -37,7 +39,8 @@ function Login() {
 
     if (response.data.success) {
       setCookie("token", response.data.token);
-      
+      setCookie("username", response.data.username);
+      setCookie("email", response.data.email);
       navigate("/dashboard");
       setLoading(false);
     } else {
@@ -72,7 +75,7 @@ function Login() {
                   type={hide ? "password" : "text"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Create strong password"
+                  placeholder="Enter your password"
                 />
                 <div onClick={() => setHide(!hide)}>
                   {hide ? (
@@ -89,22 +92,21 @@ function Login() {
               </div>
               <div className="input-wrapper terms">
                 <div>
-                  <input
-                    
-                    type="checkbox"
-                    placeholder="Create strong password"
-                  />
+                  <input type="checkbox" />
                   <label>Remember me</label>
                 </div>
                 <span>Forgot Password?</span>
               </div>
 
-              <button  type="submit" className={loading ? "loading login-btn" : " login-btn"}>
-              {loading ? (
-                      <img src={loader} className="loader" width={"14px"} />
-                    ) : (
-                      "Login"
-                    )}
+              <button
+                type="submit"
+                className={loading ? "loading login-btn" : " login-btn"}
+              >
+                {loading ? (
+                  <img src={loader} className="loader" width={"14px"} />
+                ) : (
+                  "Login"
+                )}
               </button>
               <p>
                 Dont't have an account?{" "}

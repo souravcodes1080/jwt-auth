@@ -117,11 +117,13 @@ const login = async (req, res) => {
       //     process.env.JWT_SECRET_KEY,
       //     { expiresIn: 3600 }
       //   );
-      const token = genToken(existingUser._id, 3600);
+      const token = genToken(existingUser._id, 8760);
       return res.json({
         success: true,
         message: "Login sucessfull.",
-        token: token,
+        username: existingUser.username,
+        email : existingUser.email,
+        token: token
       });
     } else {
       return res.json({ success: false, message: "Incorrect Password." });

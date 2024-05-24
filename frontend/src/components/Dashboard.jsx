@@ -23,7 +23,8 @@ function Dashboard() {
 
   const handleLogout = () => {
     removeCookie(["token"]);
-    removeCookie(["email"]);
+    removeCookie(["email" ]);
+    removeCookie(["username" ]);
     navigate("/");
   };
 
@@ -36,6 +37,7 @@ function Dashboard() {
   return (
     <>
       <h1>Dashboard</h1>
+      <h3>Welcome {cookies.username}</h3>
       {data.map((user, index) => (
         <div key={index}>{user.username}</div>
       ))}

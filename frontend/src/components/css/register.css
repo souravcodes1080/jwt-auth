@@ -163,6 +163,10 @@
     text-decoration: underline;
     text-align: right;
 }
+.change{
+    color: rgb(78, 78, 255) !important;
+    cursor: pointer;
+}
 
 @media (max-width:1400px) {
     .register-page{
