@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./css/register.css";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
@@ -12,10 +12,14 @@ import OtpInput from "react-otp-input";
 import axios from "axios";
 import loader from "../assets/loader.png";
 import { toast } from "react-toastify";
+import { AuthContext } from "../context/AuthContext";
 function Homepage() {
+
+    const {loading, setLoading} = useContext(AuthContext)
+
   const navigate = useNavigate();
   const [cookies, setCookies] = useCookies(["token", "email"]);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

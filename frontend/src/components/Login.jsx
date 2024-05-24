@@ -1,6 +1,6 @@
 import axios from "axios";
 import "./css/register.css";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
@@ -12,10 +12,12 @@ import eyeOpen from "../assets/eyeOpen.jpg";
 import eyeClose from "../assets/eyeClose.jpg";
 
 import loader from "../assets/loader.png";
+import { AuthContext } from "../context/AuthContext";
 function Login() {
+  const {loading, setLoading} = useContext(AuthContext)
   const navigate = useNavigate();
   const [cookies, setCookie] = useCookies(["token"]);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [hide, setHide] = useState(true);
