@@ -107,6 +107,9 @@ const login = async (req, res) => {
     if (!existingUser) {
       return res.json({ success: false, message: "No user found." });
     }
+    if(!existingUser.isVerified){
+      return res.json({ success: false, message: "User not verified." });
+    }
     const validUser = await bcrypt.compare(password, existingUser.password);
     if (validUser) {
       //   const token = jwt.sign(

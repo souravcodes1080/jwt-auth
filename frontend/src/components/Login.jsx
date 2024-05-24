@@ -35,7 +35,7 @@ function Login() {
 
     if (response.data.success) {
       setCookie("token", response.data.token);
-      toast.success(response.data.message);
+      
       navigate("/dashboard");
       setLoading(false);
     } else {
