@@ -10,10 +10,12 @@ import eyeOpen from "../assets/eyeOpen.jpg";
 import eyeClose from "../assets/eyeClose.jpg";
 import OtpInput from "react-otp-input";
 import axios from "axios";
+import loader from "../assets/loader.png";
 import { toast } from "react-toastify";
 function Homepage() {
   const navigate = useNavigate();
   const [cookies, setCookies] = useCookies(["token", "email"]);
+  const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,6 +30,7 @@ function Homepage() {
   }, []);
 
   const onSubmitHandler = async (e) => {
+    setLoading(true);
     e.preventDefault();
     const response = await axios.post(
       "http://localhost:8080/api/user/register",
@@ -39,16 +42,19 @@ function Homepage() {
     );
 
     if (response.data.success) {
-      toast.success(response.data.message);
+      setLoading(false);
+      
       setCookies("email", email);
       setShowOtp(true);
       // navigate("/verify");
     } else {
       toast.error(response.data.message);
+      setLoading(false);
     }
   };
 
   const onSubmitOtp = async (e) => {
+    setLoading(true);
     e.preventDefault();
 
     const response = await axios.post("http://localhost:8080/api/user/verify", {
@@ -56,23 +62,28 @@ function Homepage() {
       email: cookies.email,
     });
     if (response.data.success) {
-      toast.success(response.data.message);
+      
       navigate("/login");
+      setLoading(false);
     } else {
       toast.error(response.data.message);
+      setLoading(false);
     }
   };
 
-  const resendOtp = async () =>{
+  const resendOtp = async () => {
+    setLoading(true);
     const response = await axios.post("http://localhost:8080/api/user/resend", {
-      email: cookies.email
+      email: cookies.email,
     });
     if (response.data.success) {
       toast.success(response.data.message);
-  } else {
-    toast.error(response.data.message);
-  }
-  }
+      setLoading(false);
+    } else {
+      toast.error(response.data.message);
+      setLoading(false);
+    }
+  };
   return (
     <>
       <div className="auth">
@@ -95,10 +106,24 @@ function Homepage() {
                     className={"otp-input"}
                     inputStyle={true}
                     renderSeparator={<span>&nbsp;&nbsp;</span>}
-                    renderInput={(props) => <input {...props} className="otp-input" />}
+                    renderInput={(props) => (
+                      <input {...props} className="otp-input" />
+                    )}
                   />
-                  <button type="submit">Verify</button>
-                  <p className="resend" onClick={resendOtp}>Resend otp?</p>
+                  <button type="submit" className={loading ? "loading" : ""}>
+                    {loading ? (
+                      <img src={loader} className="loader" width={"14px"} />
+                    ) : (
+                      "Verify"
+                    )}
+                  </button>
+                  <p className="resend" onClick={resendOtp}>
+                  {loading ? (
+                      <img src={loader} className="loader" width={"14px"} />
+                    ) : (
+                      "Resend Otp?"
+                    )}
+                  </p>
                 </form>
               </div>
             </div>
@@ -171,7 +196,13 @@ function Homepage() {
                   </div>
                 </div> */}
 
-                  <button type="submit">Register</button>
+                  <button type="submit" className={loading ? "loading" : ""}>
+                    {loading ? (
+                      <img src={loader} className="loader" width={"14px"} />
+                    ) : (
+                      "Register"
+                    )}
+                  </button>
                   <p>
                     Already have an account?{" "}
                     <span onClick={() => navigate("/login")}>Log In</span>

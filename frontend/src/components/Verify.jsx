@@ -57,8 +57,10 @@ function Verify() {
           shouldAutoFocus={true}
           containerStyle={true}
           inputStyle={true}
+          className={"otp-input"}
+          skipDefaultStyles={false}
           renderSeparator={<span>&nbsp;&nbsp;</span>}
-          renderInput={(props) => <input {...props} />}
+          renderInput={(props) => <input {...props}  />}
         />
         <button type="submit">Verify</button>
       </form>

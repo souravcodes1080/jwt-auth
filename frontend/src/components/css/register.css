@@ -121,7 +121,21 @@
     margin-top: 4px;
     background-color: rgba(128, 128, 128, 0.471);
 }
-
+.loading{
+    opacity: 0.7;
+    cursor: not-allowed !important ;
+}
+.loader{
+    animation: loader infinite  1.5s ;
+}
+@keyframes loader {
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
 .google-btn{
    display: flex;
    width: 100%;
