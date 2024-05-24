@@ -43,7 +43,7 @@ function Homepage() {
 
     if (response.data.success) {
       setLoading(false);
-      
+
       setCookies("email", email);
       setShowOtp(true);
       // navigate("/verify");
@@ -62,7 +62,6 @@ function Homepage() {
       email: cookies.email,
     });
     if (response.data.success) {
-      
       navigate("/login");
       setLoading(false);
     } else {
@@ -78,6 +77,7 @@ function Homepage() {
     });
     if (response.data.success) {
       toast.success(response.data.message);
+      // TODO: countdown
       setLoading(false);
     } else {
       toast.error(response.data.message);
@@ -118,11 +118,7 @@ function Homepage() {
                     )}
                   </button>
                   <p className="resend" onClick={resendOtp}>
-                  {loading ? (
-                      <img src={loader} className="loader" width={"14px"} />
-                    ) : (
-                      "Resend Otp?"
-                    )}
+                    Resend Otp?
                   </p>
                 </form>
               </div>
